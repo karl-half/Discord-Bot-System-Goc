@@ -1,5 +1,41 @@
 import discord
 
+class AppsView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    @discord.ui.button(
+        label="Zaakceptuj",
+        style=discord.ButtonStyle.primary,
+        custom_id="button_1"
+    )
+    async def accept_button_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
+        embed = interaction.message.embeds[0]
+        embed.set_footer(text=f"✅・Zaakceptowano rozpoczęcie rekrutacji")
+
+        await interaction.response.edit_message(view=None, embed=embed)
+
+        await interaction.followup.send(
+            "✅・Rozpoczęto rekrutację",
+            ephemeral=True
+        )
+
+    @discord.ui.button(
+        label="Odrzuć",
+        style=discord.ButtonStyle.danger,
+        custom_id="button_2"
+    )
+    async def deny_button_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
+        embed = interaction.message.embeds[0]
+        embed.set_footer(text=f"❌・Odrzucono rozpoczęcie rekrutacji")
+
+        await interaction.response.edit_message(view=None, embed=embed)
+
+        await interaction.followup.send(
+            "❌・Zakończono rekrutację",
+            ephemeral=True
+        )
+
 async def applications(client: discord.Client, application_channel_id: int, send_to_channel_id: int, public_logs_channel_id: int):
     application_channel_id = client.get_channel(application_channel_id)
     send_to_channel_id = client.get_channel(send_to_channel_id)
@@ -34,9 +70,14 @@ class MenuApps(discord.ui.Select):
 
     async def callback(self, interaction: discord.Interaction):
         if self.values[0] == "Rekrutacja do GKO":
-            interaction.user.send()
+            embed = discord.Embed(
+                description=f'## <:goc3:1446906823184482315>・REKRUTACJA DO GKO\n* start to leci podanie pozdro',
+                color=0x002247
+            )
 
-            await interaction.response.send_message(content="Wybrano rekrutację do Globalnej Koalicji Okultystycznej. Sprawdź prywatną wiadomość od bota.", ephemeral=True)
+            embed.set_footer(text='Chronimy ludzkość ponad wszelką cenę, czy im się to podoba czy nie. \nGlobalna Koalicja Okultystyczna', icon_url="https://i.postimg.cc/ZR1qQ6q2/goc6.png")
+
+            await interaction.user.send(embed=embed, view=AppsView(), content=f'||{interaction.user.mention}||')
 
 
 class MenuView(discord.ui.View):
