@@ -18,14 +18,14 @@ class KryptonimView(discord.ui.View):
     async def accept_button_callback(self, interaction: discord.Interaction, button: discord.ui.Button):
         if not discord.utils.get(interaction.user.roles, id=ADMIN_ROLE_ID):
             return await interaction.response.send_message(
-                "*❌・Nie masz wymaganych permisji.*",
+                "❌・Nie masz wymaganych permisji.",
                 ephemeral=True
             )
         
         member = interaction.guild.get_member(self.author_id)
         if not member:
             return await interaction.response.send_message(
-                "*❌・Nie znaleziono użytkownika.*",
+                "❌・Nie znaleziono użytkownika.",
                 ephemeral=True
             )
 
@@ -42,7 +42,7 @@ class KryptonimView(discord.ui.View):
             cursor.close()
             conn.close()
             return await interaction.response.send_message(
-                f"*❌・Użytkownik {member.mention} nie został dodany do bazy danych.*",
+                f"❌・Użytkownik {member.mention} nie został dodany do bazy danych.",
                 ephemeral=True
             )
 
@@ -107,7 +107,7 @@ class Kryptonimy(commands.Cog):
         name="kryptonim",
         description="Wybierz swój kryptonim"
     )
-    async def kryptonim(self, interaction: discord.Interaction, kryptonim: str):
+    async def kryptonim(self, interaction: discord.Interaction, kryptonim: app_commands.Range[str, 1, 20]):
         if interaction.channel.id != KRYPTONIMY_CHANNEL_ID:
             return await interaction.response.send_message(
             f'❌ Ta komenda może być użyta tylko w <#{KRYPTONIMY_CHANNEL_ID}>',

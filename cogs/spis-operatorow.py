@@ -25,7 +25,7 @@ class SpisOperatorow(commands.Cog):
     async def spis_operatorow(self, interaction: discord.Interaction, dywizja: Optional[int] = None):
         if not discord.utils.get(interaction.user.roles, id=ADMIN_ROLE_ID):
             return await interaction.response.send_message(
-                "*❌・Nie masz wymaganych permisji.*",
+                "❌・Nie masz wymaganych permisji.",
                 ephemeral=True
             )
         

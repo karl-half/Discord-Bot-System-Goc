@@ -17,7 +17,7 @@ class Awanse(commands.Cog):
     async def nadaj_awans(self, interaction: discord.Interaction, osoba: discord.Member, powod: str, obecna_rola: discord.Role, nowa_rola: discord.Role, dodatkowe_informacje: str):
         if not discord.utils.get(interaction.user.roles, id=ADMIN_ROLE_ID):
             return await interaction.response.send_message(
-                "*❌・Nie masz wymaganych permisji.*",
+                "❌・Nie masz wymaganych permisji.",
                 ephemeral=True
             )
         
@@ -34,7 +34,7 @@ class Awanse(commands.Cog):
             cursor.close()
             conn.close()
             return await interaction.response.send_message(
-                f"*❌・Użytkownik {osoba.mention} nie został dodany do bazy danych.*",
+                f"❌・Użytkownik {osoba.mention} nie został dodany do bazy danych.",
                 ephemeral=True
             )
 
@@ -52,7 +52,6 @@ class Awanse(commands.Cog):
         )
 
         embed.set_thumbnail(url=osoba.avatar.url)
-        # embed.set_footer(text='Chronimy ludzkość ponad wszelką cenę, czy im się to podoba czy nie. \nGlobalna Koalicja Okultystyczna', icon_url="https://i.postimg.cc/ZR1qQ6q2/goc6.png")
 
         await interaction.response.send_message(embed=embed, content=f'||{osoba.mention}||')
 

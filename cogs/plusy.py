@@ -17,7 +17,7 @@ class Plusy(commands.Cog):
     async def daj_plusa(self, interaction: discord.Interaction, osoba: discord.Member, powod: str, ilosc_plusow: int):
         if not discord.utils.get(interaction.user.roles, id=ADMIN_ROLE_ID):
             return await interaction.response.send_message(
-                "*❌・Nie masz wymaganych permisji.*",
+                "❌・Nie masz wymaganych permisji.",
                 ephemeral=True
             )
 
@@ -41,7 +41,7 @@ class Plusy(commands.Cog):
         else:
             cursor.close()
             connect.close()
-            return await interaction.response.send_message(content=f"*❌・Użytkownik {osoba.mention} nie został dodany do bazy danych.*", ephemeral=True)
+            return await interaction.response.send_message(content=f"❌・Użytkownik {osoba.mention} nie został dodany do bazy danych.", ephemeral=True)
 
         connect.commit()
         cursor.close()

@@ -12,6 +12,8 @@ class Client(commands.Bot):
         await self.load_extension("cogs.wydalenie")
         await self.load_extension("cogs.awans")
         await self.load_extension("cogs.spis-operatorow")
+        await self.load_extension("cogs.profil")
+        await self.load_extension("cogs.dodawanie-do-bazy")
     
     async def on_ready(self):
         print(f'Zarejestrowano jako {self.user}')
@@ -27,10 +29,6 @@ class Client(commands.Bot):
         await applications(self, APPLICATION_CHANNEL_ID, SEND_TO_CHANNEL_ID, PUBLIC_LOGS_CHANNEL_ID)
 
         print('Bot pomyślnie wystartowany')
-
-
-    # async def on_message(self, message):
-        # print(f'Czarnuch {message.author} napisał {message.content}')
 
 
 intents = discord.Intents.default()

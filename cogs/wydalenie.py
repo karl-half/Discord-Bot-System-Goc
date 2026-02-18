@@ -2,6 +2,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from config import GUILD_ID, ADMIN_ROLE_ID, NIEZIDENTYFIKOWANY_ROLE_ID, NIEZIDENTYFIKOWANY_ZAKLADKA_ROLE_ID
+from database import get_connection
 
 
 class Wydalanie(commands.Cog):
@@ -11,15 +12,38 @@ class Wydalanie(commands.Cog):
     @app_commands.guilds(GUILD_ID)
     @app_commands.command(
         name="zwolnij",
-        description="Zwolnij dan osobę"
+        description="Zwolnij daną osobę"
     )
     async def zwolnij(self, interaction: discord.Interaction, osoba: discord.Member, powod: str, dodatkowe_informacje: str):
         if not discord.utils.get(interaction.user.roles, id=ADMIN_ROLE_ID):
             return await interaction.response.send_message(
-                "*❌・Nie masz wymaganych permisji.*",
+                "❌・Nie masz wymaganych permisji.",
                 ephemeral=True
             )
-        
+
+        connect = get_connection()
+        cursor = connect.cursor()
+
+        cursor.execute(
+            "SELECT discord_user_id FROM operator WHERE discord_user_id = %s",
+            (osoba.id,)
+        )
+        result = cursor.fetchone()
+
+        if result:
+            cursor.execute(
+                f"DELETE FROM operator WHERE discord_user_id = %s",
+                (osoba.id)
+            )
+        else:
+            cursor.close()
+            connect.close()
+            return await interaction.response.send_message(content=f"❌・Użytkownik {osoba.mention} nie został dodany do bazy danych.", ephemeral=True)
+
+        connect.commit()
+        cursor.close()
+
+
         embed = discord.Embed(
             description=f'## <:goc3:1446906823184482315>・ZWOLNIONO\n* **Kto wystawia zwolnienie:** {interaction.user.mention}\n* **Kogo zwalnia:** {osoba.mention}\n* **Powód:** {powod}\n* **Dodatkowe informacje:** {dodatkowe_informacje}',
             color=0x002247
